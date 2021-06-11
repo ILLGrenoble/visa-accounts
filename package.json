@@ -1,0 +1,36 @@
+{
+  "name": "visa-accounts",
+  "version": "2.0.0-SNAPSHOT",
+  "description": "Service is to authenticate a user and return a User object with relevant attributes.",
+  "keywords": [],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon",
+    "build": "rimraf ./dist && tsc",
+    "start": "npm run build && node index.js"
+  },
+  "author": "",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment-timezone": "^0.5.33",
+    "openid-client": "^3.13.0",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.5.0",
+    "winston": "^3.2.1",
+    "winston-syslog": "^2.4.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/node": "^10.17.16",
+    "@types/moment-timezone": "^0.5.30",
+    "@types/winston-syslog": "^2.0.3",
+    "source-map-support": "^0.5.16",
+    "nodemon": "^2.0.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.0.0",
+    "typescript": "~3.7.5"
+  }
+}
