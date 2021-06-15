@@ -12,23 +12,28 @@ The main objective of VISA Accounts is to authenticate a user using OpenID Conne
 
 Access to this micro service is from the VISA API Server. VISA passes the OpenID Connect token (JWT) and VISA Accounts provides the necessary mechanism to contact the SSO, validate the token and return user and account information.
 
-## Design
+## Account Attributes and Cloud-Init
 
-### Obtaining account attributes
+Account attributes are details concering the user and the account of the connected person (eg user name, email, username, home path, etc). Some are common across VISA (ie the user details) but a number can be site specific (eg home path, UID, GID, etc): these attributes are called *account parameters*.
 
-In certain services, we need to provide account username, home path or other such information. These can be very site-specific so we leave this open to the developers. Keycloak can provide these in many cases but we need to make the design open to add institute-specific modules to obtain account details.
+The Account Parameters are stored in a dictionary (key - value) and sent automatically to a user's instance as part of the Cloud-Init metadata. These can then be used during the boot process of the instance if any confiuration within the VM is needed.
+
+## Obtaining account attributes
+
+As mentioned previously, certain Account Attributes can be site-specific so we leave this open for deployment at each facility. SSOs (eg Keycloak) can provide these in many cases but we need to make the design open to add institute-specific modules to obtain account details.
 
 Different providers are necessary to obtain the account attributes as this can depend on site-specific infrastructure. For example we can have
 
-- account attributes pass in the authentication token (eg using keycloak)
+- account attributes passed with the authentication token (eg using keycloak)
 - LDAP
 - DB
 - web service
 
-An internal API is therefore used to have an abstraction of the provider methods. An environment variable allows for the path to the concrete implementation of the attribute-provider API to be specified at runtime.
+An internal API written in JavaScript is therefore used to have an abstraction of the provider methods. An environment variable allows for the path to the concrete implementation of the attribute-provider API to be specified at runtime (Docker volume mounts can also be used to link a container to the provider file on the host machine).
 
-Developing and integrating an attribute provider
-To integrate and attribute provider for a facility, a simple javascript file has to be linked to the application (specified using an environmnet variable). The interface of this javascript files is as follows:
+## Developing and integrating an attribute provider
+
+To integrate and attribute provider for a facility, a simple JavaScript file has to be linked to the application (specified using an environmnet variable). The interface of this javascript files is as follows:
 
 ```javascript
 getUserId(userInfo): string;
@@ -39,9 +44,15 @@ getEmail(userInfo): string;
 getAccountParameters(userInfo): Object;
 ```
 
-Note: The UserId is a string type to allow any identifier type from facility sites.
+### The User ID
 
-The userInfo object is a wrapper to the UserInfo Response provided by OpenID Connect and provides a single method (get(claim)) to obtain claims returned by the service. In implementing the attribute provider this can be used as follows:
+The User ID is an essential element returned by the attribute provider. This ID has to be unique for a user and it is required to be able to link the authenticated user to the facility User Office data (ie proposals or experiments) and user roles (injected separately in the ETL process of VISA).
+
+The UserId is a string type to allow any identifier type from facility sites. This may be the same as the account username but it could also be a database primary key.
+
+### The UserInfo object
+
+The userInfo object is a wrapper to the [UserInfo Response](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo) provided by OpenID Connect and provides a single method (```get(claim)```) to obtain claims returned by the SSO. In implementing the attribute provider this can be used as follows:
 
 ```javascript
 getUserId(userInfo) {
@@ -49,10 +60,13 @@ getUserId(userInfo) {
 }
 ```
 
-The *getAccountParameters* method is expected to return an object with parameters as properties. These parameters are passed to the OpenStack instance on creation.
+### Account Parameters
 
-An example attribute provider is included in the project (in the accountAttributeProviders folder):
+The *getAccountParameters* method is expected to return an object with parameters as properties. These parameters are passed to the OpenStack instance on creation using the Cloud-Init mechanism and therefore are accessible during the boot process.
 
+### Example Attribute Provider
+
+An [example attribute provider](https://github.com/ILLGrenoble/visa-accounts/blob/main/accountAttributeProviders/simple-keycloak-provider.js) is included in the VISA Account Github project:
 
 ```javascript
 const getUserId = function (userInfo) {
@@ -71,10 +85,11 @@ module.exports = {
 };
 ```
 
+### Implementation
+
 Not all attributes may come directly from OpenID Connect as mentioned previously, so connections to other databases or LDAP may be required for the full implementation.
 
-A default attribute provider is included in VISA Accounts to take standard claims from the UserInfo Response. As such not all of the methods outlined above necessarily need to be implemented. The following table shows which methods can be optionally implemented and what are the default values used by the service:
-
+A [default attribute provider](https://github.com/ILLGrenoble/visa-accounts/blob/main/src/models/attribute-provider.model.ts) is included in VISA Accounts to take standard claims from the UserInfo Response. As such not all of the methods outlined above necessarily need to be implemented. The following table shows which methods can be optionally implemented and what are the default values used by the service:
 
 | Method       | Value | Implementation | Default OIDC claim |
 |--------------|----------------|----------------|--------------------|
