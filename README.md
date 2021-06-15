@@ -85,6 +85,33 @@ A default attribute provider is included in VISA Accounts to take standard claim
 | ```getEmail```     | Mandatory      | Optional       | ```email```              |
 | ```getAccountParameters```     | Optional      | Optional       |               |
 
+## Installation
+```
+npm install
+```
+
+## Run
+```
+npm start
+```
+
+### Environment variables
+
+The following environment variables are used to configure VISA Accounts and can be placed in a dotenv file:
+
+| Environment variable | Default value | Usage |
+| ---- | ---- | ---- |
+| VISA_ACCOUNTS_SERVER_PORT | 4000 | The port on which to run the server |
+| VISA_ACCOUNTS_SERVER_HOST | localhost | The hostname on which the server is listening on |
+| VISA_ACCOUNTS_IDP | | URL to the OpenID discovery endpoint (eg https://server.com/.well-known/openid-configuration) |
+| VISA_ACCOUNTS_CLIENT_ID | | The Client ID as configured by the OpenID provider
+| VISA_ACCOUNTS_ATTRIBUTE_PROVIDER | | Absolute or relative path to the attribute provider |
+| VISA_ACCOUNTS_LOG_LEVEL | 'info' | Application logging level |
+| VISA_ACCOUNTS_LOG_TIMEZONE |  | The timezone for the formatting the time in the application log |
+| VISA_ACCOUNTS_LOG_SYSLOG_HOST |  | The syslog host (optional) |
+| VISA_ACCOUNTS_LOG_SYSLOG_PORT |  | The syslog port (optional) |
+| VISA_ACCOUNTS_LOG_SYSLOG_APP_NAME |  | The syslog application name (optional) |
+
 ## Acknowledgements
 
 <img src="https://github.com/panosc-eu/panosc/raw/master/Work%20Packages/WP9%20Outreach%20and%20communication/PaNOSC%20logo/PaNOSClogo_web_RGB.jpg" width="200px"/> 
