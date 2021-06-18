@@ -36,7 +36,7 @@ export function APPLICATION_CONFIG(): ApplicationConfig {
         host: process.env.VISA_ACCOUNTS_SERVER_HOST == null ? 'localhost' : process.env.VISA_ACCOUNTS_SERVER_HOST
       },
       logging: {
-        level: process.env.VISA_ACCOUNTS_LOG_LEVEL,
+        level: process.env.VISA_ACCOUNTS_LOG_LEVEL == null ? 'info' : process.env.VISA_ACCOUNTS_LOG_LEVEL,
         timezone: process.env.VISA_ACCOUNTS_LOG_TIMEZONE,
         syslog: {
           host: process.env.VISA_ACCOUNTS_LOG_SYSLOG_HOST,
