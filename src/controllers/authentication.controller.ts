@@ -23,17 +23,18 @@ export class AuthenticationController {
       // Authentication 
       const userInfo = await this._authenticationService.authenticate(accessToken);
 
-      const accountParameters = this._attributeService.getAccountParameters(userInfo);
+      const accountAttributes = await this._attributeService.getAccountAttributes(userInfo);
 
       // Construct user from attributes
       const user = new User({
-        id: this._attributeService.getUserId(userInfo),
-        email: this._attributeService.getEmail(userInfo),
-        firstName: this._attributeService.getFirstname(userInfo),
-        lastName: this._attributeService.getLastname(userInfo)
+        id: accountAttributes.userId,
+        email: accountAttributes.email,
+        firstName: accountAttributes.firstName,
+        lastName: accountAttributes.lastName
       });
 
-      const username = this._attributeService.getUsername(userInfo);
+      const username = accountAttributes.username;
+      const accountParameters = accountAttributes.accountParameters;
 
       logger.info(`Successfully authenticated user: ${username} (${user.id})`);
       if (user.id === "") {

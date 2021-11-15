@@ -2,12 +2,12 @@ import { AccountParameters } from "./account-parameter.model";
 import { UserInfo } from "./user-info.model";
 
 export interface IAttributeProvider {
-  getUserId(userInfo: UserInfo): string;
-  getUsername(userInfo: UserInfo): string;
-  getFirstname(userInfo: UserInfo): string;
-  getLastname(userInfo: UserInfo): string;
-  getEmail(userInfo: UserInfo): string;
-  getAccountParameters(userInfo: UserInfo): AccountParameters ;
+  getUserId(userInfo: UserInfo): string | Promise<string>;
+  getUsername(userInfo: UserInfo): string | Promise<string>;
+  getFirstname(userInfo: UserInfo): string | Promise<string>;
+  getLastname(userInfo: UserInfo): string | Promise<string>;
+  getEmail(userInfo: UserInfo): string | Promise<string>;
+  getAccountParameters(userInfo: UserInfo): AccountParameters | Promise<AccountParameters> ;
 }
 
 export class DefaultAttributeProvider implements IAttributeProvider {

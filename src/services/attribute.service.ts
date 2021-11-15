@@ -4,6 +4,15 @@ import { logger } from '../utils';
 import { AccountParameters } from '../models/account-parameter.model';
 import { singleton } from 'tsyringe';
 
+export interface AccountAttributes {
+  userId: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  accountParameters: AccountParameters;
+}
+
 @singleton()
 export class AttributeService implements IAttributeProvider {
 
@@ -15,29 +24,53 @@ export class AttributeService implements IAttributeProvider {
     this._init();
   }
 
+  async getAccountAttributes(userInfo: UserInfo): Promise<AccountAttributes> {
+    const [userId, username, firstName, lastName, email, accountParameters] = await Promise.all([
+      this.getUserId(userInfo), 
+      this.getUsername(userInfo), 
+      this.getFirstname(userInfo), 
+      this.getLastname(userInfo), 
+      this.getEmail(userInfo), 
+      this.getAccountParameters(userInfo)
+    ])
 
-  getUserId(userInfo: UserInfo): string {
-    return this._attributeProvider.getUserId(userInfo);
+    return {userId, username, firstName, lastName, email, accountParameters} as AccountAttributes;
+  }
+  
+  getUserId(userInfo: UserInfo): Promise<string> {
+    return this._getGenericAttribute<string>(userInfo, this._attributeProvider.getUserId.bind(this._attributeProvider));
   }
 
-  getUsername(userInfo: UserInfo): string {
-    return this._attributeProvider.getUsername(userInfo);
+  getUsername(userInfo: UserInfo): Promise<string> {
+    return this._getGenericAttribute<string>(userInfo, this._attributeProvider.getUsername.bind(this._attributeProvider));
   }
 
-  getFirstname(userInfo: UserInfo): string {
-    return this._attributeProvider.getFirstname(userInfo);
+  getFirstname(userInfo: UserInfo): Promise<string> {
+    return this._getGenericAttribute<string>(userInfo, this._attributeProvider.getFirstname.bind(this._attributeProvider));
   }
 
-  getLastname(userInfo: UserInfo): string {
-    return this._attributeProvider.getLastname(userInfo);
+  getLastname(userInfo: UserInfo): Promise<string> {
+    return this._getGenericAttribute<string>(userInfo, this._attributeProvider.getLastname.bind(this._attributeProvider));
   }
 
-  getEmail(userInfo: UserInfo): string {
-    return this._attributeProvider.getEmail(userInfo);
+  getEmail(userInfo: UserInfo): Promise<string> {
+    return this._getGenericAttribute<string>(userInfo, this._attributeProvider.getEmail.bind(this._attributeProvider));
   }
 
-  getAccountParameters(userInfo: UserInfo): AccountParameters {
-    return this._attributeProvider.getAccountParameters(userInfo);
+  getAccountParameters(userInfo: UserInfo): Promise<AccountParameters> {
+    return this._getGenericAttribute<AccountParameters>(userInfo, this._attributeProvider.getAccountParameters.bind(this._attributeProvider));
+  }
+
+  private _getGenericAttribute<T>(userInfo: UserInfo, attributeFunc: (userInfo: UserInfo) => T | Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      const valueOrPromise = attributeFunc(userInfo);
+      if (valueOrPromise && valueOrPromise instanceof Promise) {
+        valueOrPromise.then(resolve).catch(reject);
+  
+      } else {
+        resolve(valueOrPromise);
+      }
+    });
   }
 
   private _init(): void {
@@ -88,10 +121,6 @@ export class AttributeService implements IAttributeProvider {
       return false
     
     } else if (!attributeProvider.getUserId) {
-      logger.error('Incomplete IAttributeProvider interface: missing getUserId method');
-      return false;
-
-    }else if (!attributeProvider.getUserId) {
       logger.error('Incomplete IAttributeProvider interface: missing getUserId method');
       return false;
 
