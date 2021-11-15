@@ -13,7 +13,7 @@ export class AuthenticationController {
 
   async authenticate(req: Request, res: Response): Promise<AccountToken> {
     try {
-      const accessToken: string = req.headers['access_token'] as string;
+      const accessToken: string = req.headers['x-access-token'] as string;
       if (!accessToken) {
         logger.info(`access_token has not been sent to authenticate`);
         res.status(401).send(`Unauthorized`);
