@@ -1,3 +1,8 @@
+2.1.0 17/11/2021
+================
+ * Allow for synchronous provider calls
+ * Normalise access token name
+
 2.0.2 30/09/2021
 ================
 
