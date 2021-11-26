@@ -1,3 +1,7 @@
+2.1.1 26/11/2021
+================
+ * Fix AuthenticationError not being caught correctly
+
 2.1.0 17/11/2021
 ================
  * Allow for synchronous provider calls
