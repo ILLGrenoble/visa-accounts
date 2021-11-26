@@ -1,9 +1,8 @@
 import { logger } from "./logger";
 
-export class AuthenticationError extends Error {
+export class AuthenticationError {
 
-  constructor(message: string) {
-    super(message);
+  constructor(public message: string) {
     logger.error(message);
   }
 }
