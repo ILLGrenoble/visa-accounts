@@ -39,7 +39,7 @@ export class OpenIDDataSource  {
       });
 
       return client;
-    } catch (error: any) {
+    } catch (error) {
       logger.error(`Could not create client for OpenID Connect provider at ${idpUrl} : ${error.message}`);
 
       process.exit();
@@ -52,7 +52,7 @@ export class OpenIDDataSource  {
       const userInfo = await client.userinfo(token);
       return userInfo;
     
-    } catch (error: any) {
+    } catch (error) {
       throw new AuthenticationError(`Authentication error: ${error.message}`);
     }
   }
