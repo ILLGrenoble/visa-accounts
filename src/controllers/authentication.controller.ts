@@ -49,7 +49,7 @@ export class AuthenticationController {
  
       res.status(200).json(accountToken);
 
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof AuthenticationError) {
         logger.info(`Authentication error occurred: ${error.message}`);
         res.status(401).send(error.message);
