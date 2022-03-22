@@ -1,3 +1,6 @@
+2.2.0 22/03/2022
+================
+
 2.1.1 26/11/2021
 ================
  * Fix AuthenticationError not being caught correctly
