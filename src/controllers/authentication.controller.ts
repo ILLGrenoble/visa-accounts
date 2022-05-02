@@ -54,11 +54,16 @@ export class AuthenticationController {
         logger.info(`Authentication error occurred: ${error.message}`);
         res.status(401).send(error.message);
         
-      } else {
+      } else if (error instanceof Error) {
         logger.error(`Internal server error occurred during authentication.`);
         console.log(error.stack);
         res.status(500).send(`Server error: ${error.message}`);
-}
+      
+      } else {
+        logger.error(`Unknown server error occurred during authentication.`);
+        console.log(error);
+        res.status(500).send(`Server error: ${error}`);
+      }
     }
   }
   

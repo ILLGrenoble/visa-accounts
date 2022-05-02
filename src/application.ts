@@ -51,7 +51,7 @@ export class Application {
   }
 
   private _init() {
-    container.register<OpenIDDataSource>("DataSource", {
+    container.register<OpenIDDataSource>(OpenIDDataSource, {
       useValue: this._datasource
     });
   }
