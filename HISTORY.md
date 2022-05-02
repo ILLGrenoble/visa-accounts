@@ -1,3 +1,9 @@
+2.2.1 02/05/2022
+================
+ * Fix injection of OpenID DataSource
+ * Ensure OpenID connect client is only created once and not at every authentication request
+ * Fix Typescript catch syntax errors
+
 2.2.0 22/03/2022
 ================
 
