@@ -6,12 +6,17 @@ import { AuthenticationError, logger } from '../utils';
 
 @singleton()
 export class AuthenticationController {
+
+  private _requestId: number = 0;
+
   constructor(
-      private _authenticationService: AuthenticationService,
-     private _attributeService: AttributeService) {
+    private _authenticationService: AuthenticationService,
+    private _attributeService: AttributeService) {
   }
 
   async authenticate(req: Request, res: Response): Promise<AccountToken> {
+    const requestId = ++this._requestId;
+
     try {
       const accessToken: string = req.headers['x-access-token'] as string;
       if (!accessToken) {
@@ -20,7 +25,9 @@ export class AuthenticationController {
         return;
       }
 
-      // Authentication 
+      // Authentication
+      logger.debug(`[${requestId}] Starting authentication request`);
+
       const userInfo = await this._authenticationService.authenticate(accessToken);
 
       const accountAttributes = await this._attributeService.getAccountAttributes(userInfo);
@@ -36,7 +43,7 @@ export class AuthenticationController {
       const username = accountAttributes.username;
       const accountParameters = accountAttributes.accountParameters;
 
-      logger.info(`Successfully authenticated user: ${username} (${user.id})`);
+      logger.info(`[${requestId}] Successfully authenticated user: ${username} (${user.id})`);
       if (user.id === "") {
           logger.error(`User ${user.fullName} with login ${username} has an invalid user id (empty string)`);
       }
@@ -51,16 +58,16 @@ export class AuthenticationController {
 
     } catch (error) {
       if (error instanceof AuthenticationError) {
-        logger.info(`Authentication error occurred: ${error.message}`);
+        logger.error(`[${requestId}] Authentication error occurred: ${error.message}`);
         res.status(401).send(error.message);
         
       } else if (error instanceof Error) {
-        logger.error(`Internal server error occurred during authentication.`);
+        logger.error(`[${requestId}] Internal server error occurred during authentication.`);
         console.log(error.stack);
         res.status(500).send(`Server error: ${error.message}`);
       
       } else {
-        logger.error(`Unknown server error occurred during authentication.`);
+        logger.error(`[${requestId}] Unknown server error occurred during authentication.`);
         console.log(error);
         res.status(500).send(`Server error: ${error}`);
       }

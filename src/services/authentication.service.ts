@@ -14,7 +14,7 @@ export class AuthenticationService {
 
     let userinfoResponse: UserinfoResponse = null
     if (accessToken == null) {
-      throw new AuthenticationError(`Authentication error: token is null`);
+      throw new AuthenticationError(`token is null`);
 
     } else {
       userinfoResponse = await this._openIdDataSource.authenticate(accessToken);
