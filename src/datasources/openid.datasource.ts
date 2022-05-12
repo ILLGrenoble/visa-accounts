@@ -1,5 +1,6 @@
 import { APPLICATION_CONFIG } from '../application-config';
 import { Client, Issuer, UserinfoResponse } from 'openid-client';
+import { decode } from 'jsonwebtoken';
 import { AuthenticationError, logger } from '../utils';
 
 export class OpenIDDataSource  {
@@ -45,12 +46,21 @@ export class OpenIDDataSource  {
 
   async authenticate(token: string): Promise<UserinfoResponse> {
     try {
-      const client = await this.client;
+      // Verify that the access token is for the correct client
+      const jwt = decode(token, {complete: true});
+      if (jwt.payload['azp'] && jwt.payload['azp'] !== APPLICATION_CONFIG().idp.clientId) {
+        throw new AuthenticationError('Token does not correspond to the client');
+      }
+
+    const client = await this.client;
       const userInfo = await client.userinfo(token);
       return userInfo;
     
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof AuthenticationError) {
+        throw error;
+        
+      } else if (error instanceof Error) {
         throw new AuthenticationError(`Authentication error: ${error.message}`);
 
       } else {
@@ -62,12 +72,14 @@ export class OpenIDDataSource  {
   private async _createClient(): Promise<Client> {
     const idpUrl = APPLICATION_CONFIG().idp.url;
     const clientId = APPLICATION_CONFIG().idp.clientId;
+    const userInfoSignedResponseAlg = APPLICATION_CONFIG().idp.userInfoSignedResponseAlg;
 
     try {
       logger.debug('Creating new OpenID connect client');
       const issuer = await Issuer.discover(idpUrl);
       const client = new issuer.Client({
-        client_id: clientId
+        client_id: clientId,
+        userinfo_signed_response_alg: userInfoSignedResponseAlg,
       });
 
       return client;

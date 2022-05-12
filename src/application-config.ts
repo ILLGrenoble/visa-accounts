@@ -17,6 +17,7 @@ export class ApplicationConfig {
   idp: {
     url: string;
     clientId: string;
+    userInfoSignedResponseAlg: string;
   };
 
   attributeProviderPath: string;
@@ -47,6 +48,7 @@ export function APPLICATION_CONFIG(): ApplicationConfig {
       idp: {
         url: process.env.VISA_ACCOUNTS_IDP,
         clientId: process.env.VISA_ACCOUNTS_CLIENT_ID,
+        userInfoSignedResponseAlg: process.env.VISA_ACCOUNTS_USERINFO_SIGNED_RESPONSE_ALG == null ? null : process.env.VISA_ACCOUNTS_USERINFO_SIGNED_RESPONSE_ALG,
       },
       attributeProviderPath: process.env.VISA_ACCOUNTS_ATTRIBUTE_PROVIDER
     };
