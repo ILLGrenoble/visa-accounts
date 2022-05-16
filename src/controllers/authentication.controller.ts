@@ -28,7 +28,7 @@ export class AuthenticationController {
       // Authentication
       logger.debug(`[${requestId}] Starting authentication request`);
 
-      const userInfo = await this._authenticationService.authenticate(accessToken);
+      const userInfo = await this._authenticationService.authenticate(requestId, accessToken);
 
       const accountAttributes = await this._attributeService.getAccountAttributes(userInfo);
 

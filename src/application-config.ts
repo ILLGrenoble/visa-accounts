@@ -19,6 +19,7 @@ export class ApplicationConfig {
     clientId: string;
     userInfoSignedResponseAlg: string;
     timeoutMs: number;
+    cacheExpirationS: number;
   };
 
   attributeProviderPath: string;
@@ -51,6 +52,7 @@ export function APPLICATION_CONFIG(): ApplicationConfig {
         clientId: process.env.VISA_ACCOUNTS_CLIENT_ID,
         userInfoSignedResponseAlg: process.env.VISA_ACCOUNTS_IDP_USERINFO_SIGNED_RESPONSE_ALG == null ? null : process.env.VISA_ACCOUNTS_IDP_USERINFO_SIGNED_RESPONSE_ALG,
         timeoutMs: process.env.VISA_ACCOUNTS_IDP_TIMEOUT_MS == null ? null : +process.env.VISA_ACCOUNTS_IDP_TIMEOUT_MS,
+        cacheExpirationS: process.env.VISA_ACCOUNTS_IDP_CACHE_EXPIRATION_S == null ? 0 : +process.env.VISA_ACCOUNTS_IDP_CACHE_EXPIRATION_S,
       },
       attributeProviderPath: process.env.VISA_ACCOUNTS_ATTRIBUTE_PROVIDER
     };

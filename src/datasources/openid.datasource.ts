@@ -55,7 +55,6 @@ export class OpenIDDataSource  {
     const client = await this.client;
       const userInfo = await client.userinfo(token);
       return userInfo;
-    
     } catch (error) {
       if (error instanceof AuthenticationError) {
         throw error;
