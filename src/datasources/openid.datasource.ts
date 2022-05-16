@@ -1,5 +1,5 @@
 import { APPLICATION_CONFIG } from '../application-config';
-import { Client, Issuer, UserinfoResponse } from 'openid-client';
+import { Client, custom, HttpOptions, Issuer, UserinfoResponse } from 'openid-client';
 import { decode } from 'jsonwebtoken';
 import { AuthenticationError, logger } from '../utils';
 
@@ -81,6 +81,12 @@ export class OpenIDDataSource  {
         client_id: clientId,
         userinfo_signed_response_alg: userInfoSignedResponseAlg,
       });
+
+      // Define custom options
+      client[custom.http_options] = (options: HttpOptions) => {
+        const timeout = APPLICATION_CONFIG().idp.timeoutMs || options.timeout;
+        return { ...options, timeout: timeout }
+      }
 
       return client;
     } catch (error) {
