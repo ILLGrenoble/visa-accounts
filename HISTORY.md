@@ -1,3 +1,10 @@
+2.2.2 18/05/2022
+================
+ * Update dependencies
+ * Allow caching of the authentication results (UserInfo or Error)
+ * Allow client to specify a timeout for the calls to the SSO
+ * Allow specification of a UserInfo Signed Response Alg (eg RS256) for the UserInfo Response from the SSO
+
 2.2.1 02/05/2022
 ================
  * Fix injection of OpenID DataSource
