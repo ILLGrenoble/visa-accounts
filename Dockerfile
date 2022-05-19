@@ -1,7 +1,8 @@
 FROM node:14-slim as build
 
 RUN apt-get update && apt-get install curl -y
-RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash -s -- -b /usr/local/bin
+
+RUN curl -sf https://gobinaries.com/tj/node-prune | sh
 
 WORKDIR /app
 
