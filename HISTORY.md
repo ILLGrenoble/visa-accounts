@@ -1,3 +1,7 @@
+2.2.3 19/05/2022
+================
+ * Only cache successful authentication results (avoid caching transient errors)
+
 2.2.2 18/05/2022
 ================
  * Update dependencies
