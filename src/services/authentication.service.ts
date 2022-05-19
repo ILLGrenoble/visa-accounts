@@ -24,27 +24,28 @@ export class AuthenticationService {
     if (this._authenticationCache.enabled) {
       const cacheEntry = this._authenticationCache.getAuthentication(accessToken);
       if (cacheEntry && !cacheEntry.isExpired()) {
-        logger.debug(`[${requestId}] Obtained authentication from cache`);
+        logger.debug(`[${requestId}] Obtaining authentication from cache`);
         return cacheEntry.getUserInfo();
       }
     }
 
     // Obtain a new authentication with the IDP
     try {
+      logger.debug(`[${requestId}] Obtaining authentication from IDP`);
       const userinfoResponse = await this._openIdDataSource.authenticate(accessToken);
       const userInfo = new UserInfo(userinfoResponse);
   
       if (this._authenticationCache.enabled) {
-        logger.debug(`[${requestId}] Obtained authentication from IDP`);
         this._authenticationCache.addValidAuthentication(accessToken, userInfo);
       }
   
       return userInfo;
   
     } catch (error) {
-      if (this._authenticationCache.enabled) {
-        this._authenticationCache.addInvalidAuthentication(accessToken, error);
-      }
+      // Do not create a cache entry as the error could be transient (timeout for example)
+      // if (this._authenticationCache.enabled) {
+      //   this._authenticationCache.addInvalidAuthentication(accessToken, error);
+      // }
       throw error;
     }
   }

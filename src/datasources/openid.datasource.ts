@@ -52,7 +52,7 @@ export class OpenIDDataSource  {
         throw new AuthenticationError('Token does not correspond to the client');
       }
 
-    const client = await this.client;
+      const client = await this.client;
       const userInfo = await client.userinfo(token);
       return userInfo;
     } catch (error) {
