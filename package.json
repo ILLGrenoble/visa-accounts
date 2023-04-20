@@ -1,6 +1,6 @@
 {
   "name": "visa-accounts",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Service is to authenticate a user and return a User object with relevant attributes.",
   "keywords": [],
   "main": "index.js",
