@@ -1,4 +1,3 @@
-import { UserinfoResponse } from 'openid-client';
 import { singleton } from 'tsyringe';
 import { APPLICATION_CONFIG } from '../application-config';
 import { OpenIDDataSource } from '../datasources';

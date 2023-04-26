@@ -82,7 +82,7 @@ export class OpenIDDataSource  {
       });
 
       // Define custom options
-      client[custom.http_options] = (options: HttpOptions) => {
+      client[custom.http_options] = (url: URL, options: HttpOptions) => {
         const timeout = APPLICATION_CONFIG().idp.timeoutMs || options.timeout;
         return { ...options, timeout: timeout }
       }
