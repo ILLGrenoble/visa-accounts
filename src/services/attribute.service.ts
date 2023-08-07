@@ -1,6 +1,6 @@
 import { DefaultAttributeProvider, IAttributeProvider, UserInfo } from '../models';
 import { APPLICATION_CONFIG } from '../application-config';
-import { logger } from '../utils';
+import { AuthenticationError, logger } from '../utils';
 import { AccountParameters } from '../models/account-parameter.model';
 import { singleton } from 'tsyringe';
 
@@ -33,6 +33,10 @@ export class AttributeService implements IAttributeProvider {
       this.getEmail(userInfo), 
       this.getAccountParameters(userInfo)
     ])
+
+    if (userId == null) {
+      throw new AuthenticationError('User Id was not defined by the attribute provider');
+    } 
 
     return {userId, username, firstName, lastName, email, accountParameters} as AccountAttributes;
   }
