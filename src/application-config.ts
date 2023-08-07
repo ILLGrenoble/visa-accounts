@@ -23,6 +23,7 @@ export class ApplicationConfig {
   };
 
   attributeProviderPath: string;
+  invalidUserIDs: string[];
 
   constructor(data?: Partial<ApplicationConfig>) {
     Object.assign(this, data);
@@ -54,7 +55,8 @@ export function APPLICATION_CONFIG(): ApplicationConfig {
         timeoutMs: process.env.VISA_ACCOUNTS_IDP_TIMEOUT_MS == null ? null : +process.env.VISA_ACCOUNTS_IDP_TIMEOUT_MS,
         cacheExpirationS: process.env.VISA_ACCOUNTS_IDP_CACHE_EXPIRATION_S == null ? 0 : +process.env.VISA_ACCOUNTS_IDP_CACHE_EXPIRATION_S,
       },
-      attributeProviderPath: process.env.VISA_ACCOUNTS_ATTRIBUTE_PROVIDER
+      attributeProviderPath: process.env.VISA_ACCOUNTS_ATTRIBUTE_PROVIDER,
+      invalidUserIDs: process.env.VISA_ACCOUNTS_INVALID_USER_IDS ? process.env.VISA_ACCOUNTS_INVALID_USER_IDS.split(',') : [],
     };
   }
 

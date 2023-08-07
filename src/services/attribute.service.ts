@@ -34,8 +34,9 @@ export class AttributeService implements IAttributeProvider {
       this.getAccountParameters(userInfo)
     ])
 
-    if (userId == null) {
-      throw new AuthenticationError('User Id was not defined by the attribute provider');
+    const invalidUserIDs = APPLICATION_CONFIG().invalidUserIDs; 
+    if (userId == null || invalidUserIDs.includes(userId)) {
+      throw new AuthenticationError('User Id from the attribute provider is invalid');
     } 
 
     return {userId, username, firstName, lastName, email, accountParameters} as AccountAttributes;
