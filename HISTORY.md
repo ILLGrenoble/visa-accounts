@@ -1,3 +1,8 @@
+2.9.0 16/10/2023
+================
+ * Add blacklist of userIds and test for invalid IDs given by the attribute provider
+ * Verify that the userId returned by the attribute provider is valid
+
 2.8.0 28/04/2023
 ================
  * Update to node 20 and update all packages.
