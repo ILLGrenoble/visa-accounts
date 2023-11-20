@@ -1,3 +1,6 @@
+2.10.0 20/11/2023
+================
+
 2.9.0 16/10/2023
 ================
  * Add blacklist of userIds and test for invalid IDs given by the attribute provider
