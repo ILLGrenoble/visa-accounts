@@ -1,3 +1,8 @@
+3.0.0 15/11/2024
+================
+ * Update github pipeline
+ * Update to dual license
+
 2.11.0 09/01/2024
 ================
 
