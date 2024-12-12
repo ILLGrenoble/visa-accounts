@@ -1,3 +1,7 @@
+3.1.0 12/12/2024
+================
+ * Release version of VISA 3.X: tag alignment of visa-api-server, visa-web, visa-accounts and visa-jupyter-proxy
+
 3.0.0 15/11/2024
 ================
  * Update github pipeline
