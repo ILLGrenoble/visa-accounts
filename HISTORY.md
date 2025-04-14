@@ -1,3 +1,8 @@
+3.2.0 14/04/2025
+================
+ * Update to Node 22
+ * Update all dependencies
+
 3.1.0 12/12/2024
 ================
  * Release version of VISA 3.X: tag alignment of visa-api-server, visa-web, visa-accounts and visa-jupyter-proxy

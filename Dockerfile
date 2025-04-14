@@ -1,4 +1,4 @@
-FROM node:20-slim as build
+FROM node:22-slim AS build
 
 RUN apt-get update && apt-get install curl -y
 
@@ -20,7 +20,7 @@ RUN npm prune --production
 RUN /usr/local/bin/node-prune
 
 # Check out https://hub.docker.com/_/node to select a new base image
-FROM node:20-alpine
+FROM node:22-alpine
 
 # Add timezone info (to allow for modification at runtime)
 RUN apk --update add tzdata alpine-conf

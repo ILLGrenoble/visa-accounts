@@ -4,7 +4,7 @@ import { APPLICATION_CONFIG } from '../application-config';
 import moment from 'moment-timezone';
 
 export const buildLogger = function() {
-  const appendTimestamp = format((info, opts) => {
+  const appendTimestamp = format((info, opts: any) => {
     if (opts && opts.tz) {
       info.timestamp = moment().tz(opts.tz).format('YYYY-MM-DD HH:mm:ss');
 
